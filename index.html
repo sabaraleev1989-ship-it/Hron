@@ -12,7 +12,7 @@
             --silver: #c0c0c2;
             --red: #e30613;
             --blue: #0055a4;
-            --ultraglass: rgba(0, 0, 0, 0.95); /* Полностью черный для контраста */
+            --ultraglass: rgba(0, 0, 0, 0.95); /* Полностью черный для контраста текста */
         }
 
         body {
@@ -28,28 +28,28 @@
             position: relative;
         }
 
-        /* Герб команды - теперь он четкий и главный */
+        /* Герб команды - теперь он четкий, яркий и главный */
         .scorp-logo-overlay {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 75%; /* Занимает 75% ширины экрана */
-            max-width: 450px;
+            width: 80%; /* Занимает 80% ширины экрана */
+            max-width: 500px;
             z-index: 1; /* Позади интерфейса */
             background: url('logo.png') no-repeat center center;
             background-size: contain;
-            height: 75vh;
-            filter: drop-shadow(0 0 10px rgba(192, 192, 194, 0.4)); /* Легкое свечение */
+            height: 80vh;
+            filter: drop-shadow(0 0 10px rgba(192, 192, 194, 0.6)); /* Четкое серебристое свечение */
         }
 
-        /* Калькулятор - теперь более компактный и прозрачный */
+        /* Калькулятор парит поверх герба */
         .calc-interface {
             position: relative;
             z-index: 2; /* Парит поверх герба */
             width: 80%;
             max-width: 300px;
-            background: rgba(0, 0, 0, 0.9); /* Почти черный для контраста текста */
+            background: rgba(0, 0, 0, 0.9); /* Почти черный для контраста */
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             padding: 20px;
