@@ -12,49 +12,58 @@
             --silver: #c0c0c2;
             --red: #e30613;
             --blue: #0055a4;
-            --glass: rgba(10, 10, 10, 0.88);
         }
 
         body {
             margin: 0;
             padding: 0;
             height: 100vh;
+            background-color: black;
             display: flex;
-            justify-content: center;
+            flex-direction: column; /* Располагаем элементы вертикально */
             align-items: center;
             font-family: -apple-system, sans-serif;
-            /* Финальный фон: Крупный и яркий шеврон */
-            background: #000 url('logo.png') no-repeat center center;
-            background-size: 85% auto; /* Крупный шеврон */
-            background-blend-mode: hard-light; /* Делает шеврон ярче */
-            color: white;
             overflow: hidden;
         }
 
+        /* Логотип наверху */
+        .header-logo {
+            flex: 1; /* Занимает всё свободное место сверху */
+            width: 90%;
+            max-width: 400px;
+            background: url('logo.png') no-repeat center bottom; /* Прижат к низу своего блока */
+            background-size: contain;
+            margin-top: 20px;
+            filter: drop-shadow(0 0 15px rgba(192, 192, 194, 0.4));
+        }
+
+        /* Калькулятор внизу */
         .container {
-            width: 85%;
-            max-width: 320px;
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            padding: 25px;
-            border-radius: 35px;
-            border: 1px solid rgba(192, 192, 194, 0.4);
-            box-shadow: 0 0 50px rgba(0,0,0,1);
+            width: 90%;
+            max-width: 340px;
+            background: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 30px 30px 0 0; /* Скругление только сверху */
+            border: 1px solid rgba(192, 192, 194, 0.2);
+            border-bottom: none;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.8);
             text-align: center;
+            margin-bottom: 0; /* Плотно к низу экрана */
         }
 
         h1 {
-            color: white;
-            font-size: 24px;
-            margin: 0 0 25px;
+            color: var(--silver);
+            font-size: 18px;
+            margin: 0 0 20px;
             text-transform: uppercase;
-            letter-spacing: 12px;
+            letter-spacing: 8px;
             font-weight: 900;
         }
 
-        .input-block { margin-bottom: 25px; text-align: left; }
-        .label-row { display: flex; justify-content: space-between; margin-bottom: 10px; color: var(--silver); font-weight: bold; font-size: 12px; }
+        .input-block { margin-bottom: 20px; text-align: left; }
+        .label-row { display: flex; justify-content: space-between; margin-bottom: 8px; color: var(--silver); font-size: 12px; font-weight: bold; }
 
         input[type=range] {
             -webkit-appearance: none;
@@ -71,46 +80,57 @@
             width: 30px;
             border-radius: 50%;
             background: var(--silver);
-            border: 3px solid #111;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            border: 2px solid #000;
             cursor: pointer;
         }
 
-        .results { display: flex; gap: 12px; margin-top: 20px; }
+        .results { display: flex; gap: 10px; margin-top: 15px; }
         .res-card {
             flex: 1;
             background: rgba(255,255,255,0.03);
-            padding: 15px 5px;
-            border-radius: 20px;
-            border: 1px solid rgba(192, 192, 194, 0.2);
+            padding: 12px 5px;
+            border-radius: 15px;
+            border: 1px solid rgba(192, 192, 194, 0.1);
         }
 
-        .val { display: block; font-size: 30px; font-weight: 900; }
-        .j-color { color: var(--red); text-shadow: 0 0 10px rgba(227, 6, 19, 0.3); }
-        .v-color { color: var(--blue); text-shadow: 0 0 10px rgba(0, 85, 164, 0.3); }
-        .unit { font-size: 9px; color: var(--silver); text-transform: uppercase; margin-top: 5px; letter-spacing: 1px; }
+        .val { display: block; font-size: 28px; font-weight: 900; }
+        .j-color { color: var(--red); }
+        .v-color { color: var(--blue); }
+        .unit { font-size: 9px; color: var(--silver); text-transform: uppercase; opacity: 0.7; }
         
-        .footer { margin-top: 25px; font-size: 11px; color: #444; font-weight: bold; letter-spacing: 3px; text-transform: uppercase; }
+        .footer { margin: 15px 0 10px; font-size: 9px; color: #444; font-weight: bold; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>ХРОН</h1>
-    <div class="input-block">
-        <div class="label-row"><span>ВЕС ШАРА</span><span id="w-val">0.30 г</span></div>
-        <input type="range" id="weight" min="0.12" max="0.50" step="0.01" value="0.30" oninput="update()">
+    <div class="header-logo"></div>
+
+    <div class="container">
+        <h1>ХРОН</h1>
+
+        <div class="input-block">
+            <div class="label-row"><span>ВЕС ШАРА</span><span id="w-val">0.30 г</span></div>
+            <input type="range" id="weight" min="0.12" max="0.50" step="0.01" value="0.30" oninput="update()">
+        </div>
+
+        <div class="input-block">
+            <div class="label-row"><span>СКОРОСТЬ</span><span id="s-val">120 м/с</span></div>
+            <input type="range" id="speed" min="50" max="200" step="1" value="120" oninput="update()">
+        </div>
+
+        <div class="results">
+            <div class="res-card">
+                <span class="val j-color" id="joules">2.16</span>
+                <span class="unit">Джоуля</span>
+            </div>
+            <div class="res-card">
+                <span class="val v-color" id="m02">147</span>
+                <span class="unit">м/с (0.20г)</span>
+            </div>
+        </div>
+
+        <div class="footer">СК СКОРПИОН 3.0</div>
     </div>
-    <div class="input-block">
-        <div class="label-row"><span>СКОРОСТЬ</span><span id="s-val">120 м/с</span></div>
-        <input type="range" id="speed" min="50" max="200" step="1" value="120" oninput="update()">
-    </div>
-    <div class="results">
-        <div class="res-card"><span class="val j-color" id="joules">2.16</span><span class="unit">Джоуля</span></div>
-        <div class="res-card"><span class="val v-color" id="m02">147</span><span class="unit">м/с (0.20г)</span></div>
-    </div>
-    <div class="footer">СК СКОРПИОН 3.0</div>
-</div>
 
 <script>
     function update() {
