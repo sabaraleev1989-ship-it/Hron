@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="manifest.json">
     <title>ХРОН СКОРПИОН</title>
     <style>
         :root {
             --silver: #c0c0c2;
             --red: #e30613;
             --blue: #0055a4;
-            --glass: rgba(10, 10, 10, 0.82); /* Сделали стекло чуть прозрачнее */
+            --ultraglass: rgba(0, 0, 0, 0.95); /* Полностью черный для контраста */
         }
 
         body {
@@ -22,40 +23,53 @@
             justify-content: center;
             align-items: center;
             font-family: -apple-system, sans-serif;
-            
-            /* Финальный фон: Логотип крупно и ярко! */
-            background: #000 url('logo.png') no-repeat center center;
-            background-size: 85% auto; /* Растянули шеврон, чтобы он заполнил экран */
-            background-blend-mode: luminosity; /* Объединили с черным для глубины */
-            color: white;
+            background-color: black;
             overflow: hidden;
+            position: relative;
         }
 
-        .container {
-            width: 85%;
-            max-width: 320px;
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            padding: 25px;
-            border-radius: 35px;
-            border: 1px solid rgba(192, 192, 194, 0.3); /* Граница стала четче */
+        /* Герб команды - теперь он четкий и главный */
+        .scorp-logo-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 75%; /* Занимает 75% ширины экрана */
+            max-width: 450px;
+            z-index: 1; /* Позади интерфейса */
+            background: url('logo.png') no-repeat center center;
+            background-size: contain;
+            height: 75vh;
+            filter: drop-shadow(0 0 10px rgba(192, 192, 194, 0.4)); /* Легкое свечение */
+        }
+
+        /* Калькулятор - теперь более компактный и прозрачный */
+        .calc-interface {
+            position: relative;
+            z-index: 2; /* Парит поверх герба */
+            width: 80%;
+            max-width: 300px;
+            background: rgba(0, 0, 0, 0.9); /* Почти черный для контраста текста */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 40px;
+            border: 1px solid rgba(192, 192, 194, 0.3);
             box-shadow: 0 0 50px rgba(0,0,0,1);
             text-align: center;
         }
 
         h1 {
-            color: white; /* Название команды стало ярче */
-            font-size: 24px;
-            margin: 0 0 25px;
+            color: white;
+            font-size: 20px;
+            margin: 0 0 15px;
             text-transform: uppercase;
-            letter-spacing: 12px;
+            letter-spacing: 10px;
             font-weight: 900;
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
         }
 
-        .input-block { margin-bottom: 25px; text-align: left; }
-        .label-row { display: flex; justify-content: space-between; margin-bottom: 10px; color: var(--silver); font-weight: bold; font-size: 12px; opacity: 0.9; }
+        .input-block { margin-bottom: 20px; text-align: left; }
+        .label-row { display: flex; justify-content: space-between; margin-bottom: 8px; color: var(--silver); font-weight: bold; font-size: 11px; }
 
         input[type=range] {
             -webkit-appearance: none;
@@ -68,8 +82,8 @@
 
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            height: 30px;
-            width: 30px;
+            height: 28px;
+            width: 28px;
             border-radius: 50%;
             background: var(--silver);
             border: 3px solid #111;
@@ -77,49 +91,41 @@
             cursor: pointer;
         }
 
-        .results { display: flex; gap: 12px; margin-top: 20px; }
+        .results { display: flex; gap: 10px; margin-top: 15px; }
         .res-card {
             flex: 1;
             background: rgba(255,255,255,0.03);
-            padding: 15px 5px;
-            border-radius: 20px;
+            padding: 12px 5px;
+            border-radius: 18px;
             border: 1px solid rgba(192, 192, 194, 0.2);
         }
 
-        .val { display: block; font-size: 30px; font-weight: 900; }
+        .val { display: block; font-size: 26px; font-weight: 900; }
         .j-color { color: var(--red); text-shadow: 0 0 10px rgba(227, 6, 19, 0.3); }
         .v-color { color: var(--blue); text-shadow: 0 0 10px rgba(0, 85, 164, 0.3); }
-        .unit { font-size: 9px; color: var(--silver); text-transform: uppercase; margin-top: 5px; letter-spacing: 1px; opacity: 0.8; }
+        .unit { font-size: 9px; color: var(--silver); text-transform: uppercase; margin-top: 4px; letter-spacing: 1px; }
         
-        .footer { margin-top: 25px; font-size: 11px; color: #444; font-weight: bold; letter-spacing: 3px; text-transform: uppercase; }
+        .footer { margin-top: 20px; font-size: 10px; color: #444; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>ХРОН</h1>
+<div class="scorp-logo-overlay"></div>
 
+<div class="calc-interface">
+    <h1>ХРОН</h1>
     <div class="input-block">
         <div class="label-row"><span>ВЕС ШАРА</span><span id="w-val">0.30 г</span></div>
         <input type="range" id="weight" min="0.12" max="0.50" step="0.01" value="0.30" oninput="update()">
     </div>
-
     <div class="input-block">
         <div class="label-row"><span>СКОРОСТЬ</span><span id="s-val">120 м/с</span></div>
         <input type="range" id="speed" min="50" max="200" step="1" value="120" oninput="update()">
     </div>
-
     <div class="results">
-        <div class="res-card">
-            <span class="val j-color" id="joules">2.16</span>
-            <span class="unit">Джоуля</span>
-        </div>
-        <div class="res-card">
-            <span class="val v-color" id="m02">147</span>
-            <span class="unit">м/с (0.20г)</span>
-        </div>
+        <div class="res-card"><span class="val j-color" id="joules">2.16</span><span class="unit">Джоуля</span></div>
+        <div class="res-card"><span class="val v-color" id="m02">147</span><span class="unit">м/с (0.20г)</span></div>
     </div>
-
     <div class="footer">СК СКОРПИОН 3.0</div>
 </div>
 
@@ -134,13 +140,9 @@
         document.getElementById('joules').innerText = j;
         document.getElementById('m02').innerText = v02;
     }
-    // Регистрация оффлайн режима
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js').then(() => {
-            console.log('Scorpion Offline Ready');
-        });
+        navigator.serviceWorker.register('sw.js');
     }
 </script>
-
 </body>
 </html>
