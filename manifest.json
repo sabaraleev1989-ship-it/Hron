@@ -1,0 +1,15 @@
+{
+  "short_name": "Хрон",
+  "name": "Хрон Скорпион 3.0",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000"
+}
