@@ -8,7 +8,7 @@
     <link rel="manifest" href="manifest.json">
     <title>ХРОН СКОРПИОН</title>
     <style>
-        :root { --silver: #c0c0c2; --red: #e30613; --blue: #0055a4; }
+        :root { --silver: #c0c0c2; --red: #e30613; --blue: #0055a4; --green: #2ecc71; --orange: #f39c12; }
         
         body { 
             margin: 0; 
@@ -23,9 +23,8 @@
         }
 
         .spacer-top { height: 10px; }
-
         .header-logo { 
-            height: 32vh; 
+            height: 28vh; 
             width: 90%; 
             background: url('logo.png') no-repeat center center; 
             background-size: contain; 
@@ -33,37 +32,10 @@
             margin-bottom: 5px;
         }
 
-        .app-title {
-            font-size: 22px;
-            font-weight: 900;
-            letter-spacing: 12px;
-            color: white;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-            text-align: center;
-        }
+        .app-title { font-size: 20px; font-weight: 900; letter-spacing: 12px; color: white; text-transform: uppercase; margin-bottom: 10px; }
 
-        /* Оптимизированный ряд кнопок */
-        .quick-weight { 
-            display: flex; 
-            justify-content: space-between;
-            gap: 4px; 
-            width: 95%; 
-            margin-bottom: 15px; 
-        }
-
-        .weight-btn { 
-            background: rgba(255,255,255,0.1); 
-            border: 1px solid rgba(192, 192, 194, 0.3); 
-            color: var(--silver); 
-            padding: 10px 0; 
-            flex: 1; 
-            border-radius: 8px; 
-            font-weight: bold; 
-            font-size: 11px; /* Чуть меньше шрифт, чтобы влез "0." */
-            white-space: nowrap;
-            text-align: center;
-        }
+        .quick-weight { display: flex; justify-content: space-between; gap: 4px; width: 95%; margin-bottom: 12px; }
+        .weight-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(192, 192, 194, 0.3); color: var(--silver); padding: 10px 0; flex: 1; border-radius: 8px; font-weight: bold; font-size: 11px; white-space: nowrap; text-align: center; }
 
         .container { 
             width: 95%; 
@@ -72,26 +44,39 @@
             border-radius: 25px 25px 0 0; 
             border: 1px solid rgba(192, 192, 194, 0.2); 
             text-align: center; 
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.6);
             flex-grow: 1;
             display: flex;
             flex-direction: column;
         }
 
-        .input-block { margin-bottom: 15px; text-align: left; }
-        .label-row { display: flex; justify-content: space-between; margin-bottom: 8px; color: var(--silver); font-size: 12px; font-weight: bold; }
+        .input-block { margin-bottom: 12px; text-align: left; }
+        .label-row { display: flex; justify-content: space-between; margin-bottom: 6px; color: var(--silver); font-size: 11px; font-weight: bold; }
         
         input[type=range] { -webkit-appearance: none; width: 100%; height: 6px; background: linear-gradient(to right, var(--red), var(--blue), #fff); border-radius: 3px; outline: none; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 28px; width: 28px; border-radius: 50%; background: var(--silver); border: 2px solid #000; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 26px; width: 26px; border-radius: 50%; background: var(--silver); border: 2px solid #000; }
         
-        .results { display: flex; gap: 10px; margin-top: auto; margin-bottom: 15px; }
-        .res-card { flex: 1; background: rgba(255,255,255,0.03); padding: 12px 5px; border-radius: 15px; border: 1px solid rgba(192, 192, 194, 0.1); }
-        .val { display: block; font-size: 26px; font-weight: 900; }
+        /* Стили для допуска */
+        .status-box {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 12px;
+            margin: 10px 0;
+            min-height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed rgba(192,192,194,0.2);
+        }
+        #status-text { font-size: 13px; font-weight: bold; line-height: 1.4; text-transform: uppercase; }
+
+        .results { display: flex; gap: 10px; margin-top: auto; margin-bottom: 10px; }
+        .res-card { flex: 1; background: rgba(255,255,255,0.03); padding: 10px 5px; border-radius: 12px; border: 1px solid rgba(192, 192, 194, 0.1); }
+        .val { display: block; font-size: 24px; font-weight: 900; }
         .j-color { color: var(--red); } 
         .v-color { color: var(--blue); }
         .unit { font-size: 9px; color: var(--silver); text-transform: uppercase; opacity: 0.6; }
         
-        .footer { font-size: 8px; color: #444; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
+        .footer { font-size: 8px; color: #444; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 5px; }
     </style>
 </head>
 <body>
@@ -114,12 +99,16 @@
         </div>
         <div class="input-block">
             <div class="label-row"><span>СКОРОСТЬ</span><span id="s-val">120 м/с</span></div>
-            <input type="range" id="speed" min="50" max="200" step="1" value="120" oninput="update()">
+            <input type="range" id="speed" min="50" max="220" step="1" value="120" oninput="update()">
+        </div>
+
+        <div class="status-box">
+            <div id="status-text">Замеряемся...</div>
         </div>
         
         <div class="results">
-            <div class="res-card"><span class="val j-color" id="joules">2.16</span><span class="unit">Джоуля</span></div>
-            <div class="res-card"><span class="val v-color" id="m02">147</span><span class="unit">м/с (0.20г)</span></div>
+            <div class="res-card"><span class="val j-color" id="joules">2.16</span><span class="unit">Дж</span></div>
+            <div class="res-card"><span class="val v-color" id="m02">147</span><span class="unit">м/с (0.20)</span></div>
         </div>
         
         <div class="footer">СК СКОРПИОН 3.0</div>
@@ -132,11 +121,31 @@
         const v = document.getElementById('speed').value;
         document.getElementById('w-val').innerText = m + ' г';
         document.getElementById('s-val').innerText = v + ' м/с';
+        
         const j = (m / 1000 * v * v / 2).toFixed(2);
         const v02 = Math.sqrt((j * 2) / 0.0002).toFixed(0);
+        
         document.getElementById('joules').innerText = j;
         document.getElementById('m02').innerText = v02;
+
+        // Логика допуска
+        const st = document.getElementById('status-text');
+        if (j <= 1.5) {
+            st.innerHTML = "ВТОРИЧКА: ПИСТОЛЕТЫ, АВТОМАТЫ В ЗДАНИИ <span style='color:#2ecc71'>0М</span>";
+            st.style.color = "#2ecc71";
+        } else if (j > 1.5 && j <= 2.4) {
+            st.innerHTML = "ОСНОВНОЕ: АВТОМАТ НА ОТКРЫТОЙ МЕСТНОСТИ <span style='color:#f39c12'>10М</span>";
+            st.style.color = "#f39c12";
+        } else if (j > 2.4 && j <= 3) {
+            st.innerHTML = "СНАЙПЕРКА: ОДИНОЧНЫЙ ОГОНЬ (БОЛТОВКА, ПОЛУАВТОМАТ) <span style='color:#3498db'>30М</span>";
+            st.style.color = "#3498db";
+        } else {
+            st.innerHTML = "НЕ ДОПУСК: К ИГРЕ НЕ ДОПУСКАЕТСЯ";
+            st.style.color = "#e30613";
+        }
     }
+    // Запускаем расчет при загрузке
+    update();
     if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
 </script>
 </body>
