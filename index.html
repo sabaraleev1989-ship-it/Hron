@@ -12,6 +12,7 @@
             --silver: #c0c0c2;
             --red: #e30613;
             --blue: #0055a4;
+            --dark: #141414;
         }
 
         body {
@@ -20,50 +21,78 @@
             height: 100vh;
             background-color: black;
             display: flex;
-            flex-direction: column; /* Располагаем элементы вертикально */
+            flex-direction: column;
             align-items: center;
             font-family: -apple-system, sans-serif;
             overflow: hidden;
+            color: white;
         }
 
-        /* Логотип наверху */
+        /* Верхняя зона с логотипом */
         .header-logo {
-            flex: 1; /* Занимает всё свободное место сверху */
-            width: 90%;
+            flex: 1;
+            width: 85%;
             max-width: 400px;
-            background: url('logo.png') no-repeat center bottom; /* Прижат к низу своего блока */
+            background: url('logo.png') no-repeat center bottom;
             background-size: contain;
-            margin-top: 20px;
-            filter: drop-shadow(0 0 15px rgba(192, 192, 194, 0.4));
+            margin: 15px 0;
+            filter: drop-shadow(0 0 15px rgba(192, 192, 194, 0.5));
         }
 
-        /* Калькулятор внизу */
+        /* Панель кнопок быстрого веса */
+        .quick-weight {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            width: 90%;
+            margin-bottom: 15px;
+        }
+
+        .weight-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--silver);
+            color: var(--silver);
+            padding: 8px 0;
+            flex: 1;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .weight-btn:active {
+            background: var(--silver);
+            color: black;
+            transform: scale(0.95);
+        }
+
+        /* Основной контейнер калькулятора */
         .container {
             width: 90%;
             max-width: 340px;
-            background: rgba(20, 20, 20, 0.95);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            background: var(--dark);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             padding: 20px;
-            border-radius: 30px 30px 0 0; /* Скругление только сверху */
+            border-radius: 30px 30px 0 0;
             border: 1px solid rgba(192, 192, 194, 0.2);
             border-bottom: none;
             box-shadow: 0 -10px 40px rgba(0,0,0,0.8);
             text-align: center;
-            margin-bottom: 0; /* Плотно к низу экрана */
         }
 
         h1 {
             color: var(--silver);
-            font-size: 18px;
-            margin: 0 0 20px;
+            font-size: 16px;
+            margin: 0 0 15px;
             text-transform: uppercase;
-            letter-spacing: 8px;
+            letter-spacing: 6px;
             font-weight: 900;
         }
 
-        .input-block { margin-bottom: 20px; text-align: left; }
-        .label-row { display: flex; justify-content: space-between; margin-bottom: 8px; color: var(--silver); font-size: 12px; font-weight: bold; }
+        .input-block { margin-bottom: 18px; text-align: left; }
+        .label-row { display: flex; justify-content: space-between; margin-bottom: 8px; color: var(--silver); font-size: 11px; font-weight: bold; opacity: 0.8; }
 
         input[type=range] {
             -webkit-appearance: none;
@@ -76,34 +105,42 @@
 
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            height: 30px;
-            width: 30px;
+            height: 28px;
+            width: 28px;
             border-radius: 50%;
             background: var(--silver);
             border: 2px solid #000;
             cursor: pointer;
         }
 
-        .results { display: flex; gap: 10px; margin-top: 15px; }
+        .results { display: flex; gap: 10px; margin-top: 10px; }
         .res-card {
             flex: 1;
             background: rgba(255,255,255,0.03);
-            padding: 12px 5px;
+            padding: 10px 5px;
             border-radius: 15px;
             border: 1px solid rgba(192, 192, 194, 0.1);
         }
 
-        .val { display: block; font-size: 28px; font-weight: 900; }
+        .val { display: block; font-size: 26px; font-weight: 900; }
         .j-color { color: var(--red); }
         .v-color { color: var(--blue); }
-        .unit { font-size: 9px; color: var(--silver); text-transform: uppercase; opacity: 0.7; }
+        .unit { font-size: 9px; color: var(--silver); text-transform: uppercase; opacity: 0.6; }
         
-        .footer { margin: 15px 0 10px; font-size: 9px; color: #444; font-weight: bold; letter-spacing: 2px; }
+        .footer { margin: 12px 0 5px; font-size: 9px; color: #444; font-weight: bold; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
     <div class="header-logo"></div>
+
+    <div class="quick-weight">
+        <button class="weight-btn" onclick="setWeight(0.20)">0.20</button>
+        <button class="weight-btn" onclick="setWeight(0.25)">0.25</button>
+        <button class="weight-btn" onclick="setWeight(0.28)">0.28</button>
+        <button class="weight-btn" onclick="setWeight(0.30)">0.30</button>
+        <button class="weight-btn" onclick="setWeight(0.32)">0.32</button>
+    </div>
 
     <div class="container">
         <h1>ХРОН</h1>
@@ -133,6 +170,11 @@
     </div>
 
 <script>
+    function setWeight(val) {
+        document.getElementById('weight').value = val;
+        update();
+    }
+
     function update() {
         const m = document.getElementById('weight').value;
         const v = document.getElementById('speed').value;
@@ -143,6 +185,7 @@
         document.getElementById('joules').innerText = j;
         document.getElementById('m02').innerText = v02;
     }
+    
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js');
     }
