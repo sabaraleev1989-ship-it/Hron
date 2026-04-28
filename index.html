@@ -144,38 +144,42 @@
     </div>
 
 <script>
-    // Продвинутая вибрация для iOS/Android
     let audioCtx = null;
 
     function initAudio() {
         if (!audioCtx) {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
     }
 
-    function haptic() {
-        // Вибрация для Android
-        if (navigator.vibrate) {
-            navigator.vibrate(10);
-        }
-        // "Тихий щелчок" для iOS Taptic Engine
-        if (audioCtx) {
-            let osc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.value = 60;
-            gain.gain.value = 0.1;
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.01);
-        }
+    // Приятный механический клик
+    function playClick() {
+        if (!audioCtx) return;
+        
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        
+        osc.type = 'sine'; // Мягкая волна
+        osc.frequency.setValueAtTime(800, audioCtx.currentTime); // Высокий тон для четкости
+        osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.02); // Быстрое падение тона
+        
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.02);
+        
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.02);
     }
 
     function setW(v) { 
-        initAudio(); // Активируем аудио-контекст при первом клике
+        initAudio();
         document.getElementById('weight').value = v; 
-        haptic();
+        playClick();
         update(); 
     }
 
@@ -193,25 +197,25 @@
 
         if (isUserAction) {
             initAudio();
-            haptic();
+            playClick();
         }
 
         const st = document.getElementById('status-text');
         
         if (j <= 1.56) {
-            st.innerHTML = "ВТОРИЧКА: ПИСТОЛЕТ, РЕВОЛЬВЕР, АВТОМАТ В ЗДАНИИ — <span style='color:var(--green)'>0 МЕТРОВ</span>";
+            st.innerHTML = "ВТОРИЧКА: ПИСТОЛЕТ, РЕВОЛЬВЕР — <span style='color:var(--green)'>0М</span>";
             st.style.color = "var(--green)";
         } else if (j > 1.56 && j <= 1.82) {
-            st.innerHTML = "ОСНОВНОЕ ЭЛЕКТРОПНЕВМАТИЧЕСКОЕ И ГАЗОВОЕ ОРУЖИЕ — <span style='color:var(--orange)'>10 МЕТРОВ</span>";
+            st.innerHTML = "ОСНОВНОЕ (AEG/GAS) — <span style='color:var(--orange)'>10М</span>";
             st.style.color = "var(--orange)";
         } else if (j > 1.82 && j <= 2.25) {
-            st.innerHTML = "ОСНОВНОЕ: ПУЛЕМЕТЫ С ЛЕНТОЧНЫМ ПИТАНИЕМ (MG) — <span style='color:var(--cyan)'>20 МЕТРОВ</span>";
+            st.innerHTML = "ПУЛЕМЕТЫ (MG) — <span style='color:var(--cyan)'>20М</span>";
             st.style.color = "var(--cyan)";
         } else if (j > 2.25 && j <= 2.56) {
-            st.innerHTML = "СТАНКОВЫЕ И КРУПНОКАЛИБЕРНЫЕ ПУЛЕМЕТЫ — <span style='color:var(--purple)'>30 МЕТРОВ</span>";
+            st.innerHTML = "СТАНКОВЫЕ ПУЛЕМЕТЫ — <span style='color:var(--purple)'>30М</span>";
             st.style.color = "var(--purple)";
         } else if (j > 2.56 && j <= 3.00) {
-            st.innerHTML = "ОСНОВНОЕ: СНАЙПЕРСКОЕ ОРУЖИЕ С ОДИНОЧНОЙ СТРЕЛЬБОЙ — <span style='color:white'>30 МЕТРОВ</span>";
+            st.innerHTML = "СНАЙПЕРСКОЕ (ОДИНОЧКА) — <span style='color:white'>30М</span>";
             st.style.color = "white";
         } else {
             st.innerHTML = "НЕ ДОПУСК: К ИГРЕ НЕ ДОПУСКАЕТСЯ";
