@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="manifest" href="manifest.json">
     <title>ХРОН СКОРПИОН</title>
     <style>
         :root { 
@@ -14,7 +13,7 @@
         body { 
             margin: 0; background: #000; height: 100vh; 
             display: flex; flex-direction: column; align-items: center; 
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif; overflow: hidden; color: white; 
+            font-family: -apple-system, sans-serif; overflow: hidden; color: white; 
             -webkit-user-select: none;
         }
 
@@ -30,48 +29,48 @@
         .quick-weight { display: flex; justify-content: space-between; gap: 6px; width: 92%; margin-bottom: 15px; }
         .weight-btn { background: var(--dark-gray); border: 1px solid #333; color: var(--silver); padding: 10px 0; flex: 1; border-radius: 10px; font-weight: bold; font-size: 12px; }
 
-        .container { 
-            width: 100%; background: #000; padding: 10px 0;
-            text-align: center; flex-grow: 1; display: flex; flex-direction: column;
-        }
+        .container { width: 100%; background: #000; text-align: center; flex-grow: 1; display: flex; flex-direction: column; }
 
-        .input-block { width: 92%; margin: 0 auto 30px; text-align: left; position: relative; }
-        .label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .input-block { width: 92%; margin: 0 auto 35px; text-align: left; position: relative; }
+        .label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
         .label-name { font-size: 11px; color: #888; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; }
         .label-val { font-size: 24px; font-weight: 800; color: #fff; }
         
-        /* Измененный стиль ползунка */
+        /* Ползунок БЕЗ ПОЛОСКИ */
         input[type=range] { 
-            -webkit-appearance: none; width: 100%; height: 4px; 
-            background: #333; /* Нейтральный фон линии */
-            border-radius: 2px; outline: none; margin: 20px 0; position: relative; z-index: 10;
+            -webkit-appearance: none; width: 100%; background: transparent; 
+            outline: none; margin: 10px 0; position: relative; z-index: 10;
         }
+        input[type=range]::-webkit-slider-runnable-track { background: transparent; }
         input[type=range]::-webkit-slider-thumb { 
-            -webkit-appearance: none; height: 30px; width: 30px; border-radius: 50%; 
-            background: #fff; border: 3px solid #000;
-            box-shadow: 0 0 15px rgba(255,255,255,0.3);
+            -webkit-appearance: none; height: 34px; width: 34px; border-radius: 50%; 
+            background: #fff; border: 4px solid #000;
+            box-shadow: 0 0 15px rgba(255,255,255,0.4); margin-top: -15px;
         }
 
+        /* Шкала */
         .ticks { 
             display: flex; justify-content: space-between; 
-            width: 100%; padding: 0 14px; box-sizing: border-box;
-            position: absolute; bottom: 22px; 
+            width: 100%; padding: 0 17px; box-sizing: border-box;
+            position: absolute; bottom: 20px; 
         }
-        .ticks span { width: 1px; height: 6px; background: #222; } /* Почти невидимые мелкие штрихи */
+        .ticks span { width: 1px; height: 8px; background: #333; }
         
+        /* Основные деления теперь белые для контраста */
         .ticks span.main { 
-            height: 14px; background: var(--accent-red); width: 2px; 
-            box-shadow: 0 0 8px rgba(227, 6, 19, 0.6);
+            height: 16px; background: #fff; width: 1.5px; 
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
         }
 
-        .range-labels { display: flex; justify-content: space-between; padding: 0 2px; margin-top: 8px; }
-        .range-labels span { font-size: 10px; color: #555; font-weight: 600; width: 35px; text-align: center; }
+        .range-labels { display: flex; justify-content: space-between; padding: 0; margin-top: 10px; }
+        /* Увеличили ширину span, чтобы влезало "0.20" */
+        .range-labels span { font-size: 11px; color: #666; font-weight: 600; width: 45px; text-align: center; }
 
         .status-box {
             width: 92%; margin: 0 auto 15px; background: var(--dark-gray); 
             border-radius: 12px; padding: 15px; border: 1px solid #333;
         }
-        #status-text { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        #status-text { font-size: 12px; font-weight: 800; text-transform: uppercase; }
 
         .results { display: flex; gap: 10px; width: 92%; margin: 0 auto; flex-grow: 1; padding-bottom: 20px; }
         .res-card { 
@@ -81,7 +80,7 @@
         .val { display: block; font-size: 48px; font-weight: 900; line-height: 1; }
         .j-color { color: var(--accent-red); } 
         .v-color { color: #3498db; }
-        .unit { font-size: 12px; color: #666; text-transform: uppercase; margin-top: 8px; font-weight: 800; }
+        .unit { font-size: 11px; color: #666; text-transform: uppercase; margin-top: 8px; font-weight: 800; }
     </style>
 </head>
 <body>
@@ -112,7 +111,7 @@
         </div>
 
         <div class="status-box">
-            <div id="status-text">АНАЛИЗ ДАННЫХ...</div>
+            <div id="status-text">АНАЛИЗ...</div>
         </div>
         
         <div class="results">
@@ -125,7 +124,6 @@
     let audioCtx = null;
     let lastW, lastS;
 
-    // Генерация штрихов
     const wTicks = document.getElementById('weight-ticks');
     for (let i = 20; i <= 45; i++) {
         const s = document.createElement('span');
@@ -149,9 +147,8 @@
         if (!audioCtx) return;
         const osc = audioCtx.createOscillator();
         const g = audioCtx.createGain();
-        osc.frequency.setValueAtTime(1000, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.01);
-        g.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+        g.gain.setValueAtTime(0.04, audioCtx.currentTime);
         g.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.01);
         osc.connect(g); g.connect(audioCtx.destination);
         osc.start(); osc.stop(audioCtx.currentTime + 0.01);
