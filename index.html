@@ -23,6 +23,7 @@
             font-family: -apple-system, sans-serif; 
             overflow: hidden; 
             color: white; 
+            -webkit-user-select: none;
         }
 
         .spacer-top { height: 10px; }
@@ -59,7 +60,7 @@
         .label-val { font-size: 22px; color: #fff; }
         
         input[type=range] { -webkit-appearance: none; width: 100%; height: 8px; background: linear-gradient(to right, var(--red), var(--blue), #fff); border-radius: 4px; outline: none; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 30px; width: 30px; border-radius: 50%; background: var(--silver); border: 2px solid #000; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 32px; width: 32px; border-radius: 50%; background: var(--silver); border: 2px solid #000; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
         
         .status-box {
             background: rgba(255,255,255,0.05);
@@ -143,15 +144,38 @@
     </div>
 
 <script>
-    function haptic(int = 10) {
-        if (window.navigator && window.navigator.vibrate) {
-            window.navigator.vibrate(int);
+    // Продвинутая вибрация для iOS/Android
+    let audioCtx = null;
+
+    function initAudio() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+    }
+
+    function haptic() {
+        // Вибрация для Android
+        if (navigator.vibrate) {
+            navigator.vibrate(10);
+        }
+        // "Тихий щелчок" для iOS Taptic Engine
+        if (audioCtx) {
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.value = 60;
+            gain.gain.value = 0.1;
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.01);
         }
     }
 
     function setW(v) { 
+        initAudio(); // Активируем аудио-контекст при первом клике
         document.getElementById('weight').value = v; 
-        haptic(20);
+        haptic();
         update(); 
     }
 
@@ -167,7 +191,10 @@
         document.getElementById('joules').innerText = j.toFixed(2);
         document.getElementById('m02').innerText = v02;
 
-        if (isUserAction) haptic(5);
+        if (isUserAction) {
+            initAudio();
+            haptic();
+        }
 
         const st = document.getElementById('status-text');
         
