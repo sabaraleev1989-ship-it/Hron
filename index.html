@@ -14,22 +14,15 @@
         }
         
         body { 
-            margin: 0; 
-            background: #000; 
-            height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            font-family: -apple-system, sans-serif; 
-            overflow: hidden; 
-            color: white; 
+            margin: 0; background: #000; height: 100vh; 
+            display: flex; flex-direction: column; align-items: center; 
+            font-family: -apple-system, sans-serif; overflow: hidden; color: white; 
             -webkit-user-select: none;
         }
 
         .spacer-top { height: 10px; }
         .header-logo { 
-            height: 22vh; 
-            width: 90%; 
+            height: 22vh; width: 90%; 
             background: url('logo.png') no-repeat center center; 
             background-size: contain; 
             filter: drop-shadow(0 0 15px rgba(192, 192, 194, 0.4)); 
@@ -39,19 +32,12 @@
         .app-title { font-size: 20px; font-weight: 900; letter-spacing: 12px; color: white; text-transform: uppercase; margin-bottom: 10px; }
 
         .quick-weight { display: flex; justify-content: space-between; gap: 4px; width: 95%; margin-bottom: 12px; }
-        .weight-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(192, 192, 194, 0.3); color: var(--silver); padding: 10px 0; flex: 1; border-radius: 8px; font-weight: bold; font-size: 11px; white-space: nowrap; text-align: center; }
+        .weight-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(192, 192, 194, 0.3); color: var(--silver); padding: 10px 0; flex: 1; border-radius: 8px; font-weight: bold; font-size: 11px; text-align: center; }
 
         .container { 
-            width: 95%; 
-            background: #141414; 
-            padding: 15px 15px 10px; 
-            border-radius: 25px 25px 0 0; 
-            border: 1px solid rgba(192, 192, 194, 0.2); 
-            text-align: center; 
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            width: 95%; background: #141414; padding: 15px 15px 10px; 
+            border-radius: 25px 25px 0 0; border: 1px solid rgba(192, 192, 194, 0.2); 
+            text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;
         }
 
         .input-block { margin-bottom: 15px; text-align: left; }
@@ -63,28 +49,16 @@
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 32px; width: 32px; border-radius: 50%; background: var(--silver); border: 2px solid #000; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
         
         .status-box {
-            background: rgba(255,255,255,0.05);
-            border-radius: 12px;
-            padding: 12px;
-            margin: 5px 0;
-            min-height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px dashed rgba(192,192,194,0.2);
+            background: rgba(255,255,255,0.05); border-radius: 12px; padding: 12px; margin: 5px 0;
+            min-height: 45px; display: flex; align-items: center; justify-content: center; border: 1px dashed rgba(192,192,194,0.2);
         }
         #status-text { font-size: 11px; font-weight: bold; line-height: 1.4; text-transform: uppercase; }
 
         .results { display: flex; gap: 10px; flex-grow: 1; margin-top: 10px; margin-bottom: 10px; }
         .res-card { 
-            flex: 1; 
-            background: rgba(255,255,255,0.03); 
-            border-radius: 15px; 
+            flex: 1; background: rgba(255,255,255,0.03); border-radius: 15px; 
             border: 1px solid rgba(192, 192, 194, 0.1); 
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 10px;
+            display: flex; flex-direction: column; justify-content: center; padding: 10px;
         }
         .val { display: block; font-size: 44px; font-weight: 900; line-height: 1; }
         .j-color { color: var(--red); } 
@@ -145,6 +119,8 @@
 
 <script>
     let audioCtx = null;
+    let lastValueW = null;
+    let lastValueS = null;
 
     function initAudio() {
         if (!audioCtx) {
@@ -155,37 +131,36 @@
         }
     }
 
-    // Приятный механический клик
-    function playClick() {
+    function playSoftClick() {
         if (!audioCtx) return;
-        
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         
-        osc.type = 'sine'; // Мягкая волна
-        osc.frequency.setValueAtTime(800, audioCtx.currentTime); // Высокий тон для четкости
-        osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.02); // Быстрое падение тона
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(150, audioCtx.currentTime); 
+        osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.03);
         
-        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.02);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.03);
         
         osc.connect(gain);
         gain.connect(audioCtx.destination);
         
         osc.start();
-        osc.stop(audioCtx.currentTime + 0.02);
+        osc.stop(audioCtx.currentTime + 0.03);
     }
 
     function setW(v) { 
         initAudio();
         document.getElementById('weight').value = v; 
-        playClick();
+        playSoftClick();
         update(); 
     }
 
     function update(isUserAction = false) {
         const m = document.getElementById('weight').value;
         const v = document.getElementById('speed').value;
+        
         document.getElementById('w-val').innerText = m + ' г';
         document.getElementById('s-val').innerText = v + ' м/с';
         
@@ -195,13 +170,15 @@
         document.getElementById('joules').innerText = j.toFixed(2);
         document.getElementById('m02').innerText = v02;
 
-        if (isUserAction) {
+        // Воспроизводим звук только при реальном изменении цифр ползунком
+        if (isUserAction && (m !== lastValueW || v !== lastValueS)) {
             initAudio();
-            playClick();
+            playSoftClick();
+            lastValueW = m;
+            lastValueS = v;
         }
 
         const st = document.getElementById('status-text');
-        
         if (j <= 1.56) {
             st.innerHTML = "ВТОРИЧКА: ПИСТОЛЕТ, РЕВОЛЬВЕР — <span style='color:var(--green)'>0М</span>";
             st.style.color = "var(--green)";
