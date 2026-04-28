@@ -7,7 +7,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ХРОН СКОРПИОН">
-    
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" href="logo.png">
 
@@ -26,11 +25,19 @@
             -webkit-user-select: none;
         }
 
+        /* Обновленный стиль логотипа: убираем рамки и делаем круглым */
         .header-logo { 
-            height: 22vh; width: 90%; 
+            height: 25vh; /* Немного увеличили высоту */
+            width: 25vh; /* Делаем квадратным для идеального круга */
             background: url('logo.png') no-repeat center center; 
-            background-size: contain; 
-            margin: 20px 0 10px;
+            background-size: cover; /* Заполняем область */
+            margin: 20px auto 10px; /* Центрируем */
+            
+            /* Создаем круглую маску, чтобы скрыть прямоугольные края */
+            -webkit-mask-image: -webkit-radial-gradient(circle, white 100%, black 100%);
+            mask-image: radial-gradient(circle, white 100%, black 100%);
+            
+            filter: drop-shadow(0 0 15px rgba(255,255,255,0.15));
         }
 
         .app-title { font-size: 18px; font-weight: 900; letter-spacing: 12px; color: white; text-transform: uppercase; margin-bottom: 15px; }
@@ -88,6 +95,7 @@
 </head>
 <body>
     <div class="header-logo"></div>
+    
     <div class="app-title">ХРОН</div>
     
     <div class="quick-weight">
@@ -124,6 +132,7 @@
     </div>
 
 <script>
+    // Скрипт остается без изменений
     let audioCtx = null;
     let lastW, lastS;
 
