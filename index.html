@@ -22,50 +22,55 @@
 
         .spacer-top { height: 10px; }
         .header-logo { 
-            height: 22vh; width: 90%; 
+            height: 18vh; width: 90%; 
             background: url('logo.png') no-repeat center center; 
             background-size: contain; 
             filter: drop-shadow(0 0 15px rgba(192, 192, 194, 0.4)); 
             margin-bottom: 5px;
         }
 
-        .app-title { font-size: 20px; font-weight: 900; letter-spacing: 12px; color: white; text-transform: uppercase; margin-bottom: 10px; }
+        .app-title { font-size: 18px; font-weight: 900; letter-spacing: 10px; color: white; text-transform: uppercase; margin-bottom: 5px; }
 
-        .quick-weight { display: flex; justify-content: space-between; gap: 4px; width: 95%; margin-bottom: 12px; }
-        .weight-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(192, 192, 194, 0.3); color: var(--silver); padding: 10px 0; flex: 1; border-radius: 8px; font-weight: bold; font-size: 11px; text-align: center; }
+        .quick-weight { display: flex; justify-content: space-between; gap: 4px; width: 95%; margin-bottom: 10px; }
+        .weight-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(192, 192, 194, 0.3); color: var(--silver); padding: 8px 0; flex: 1; border-radius: 8px; font-weight: bold; font-size: 11px; text-align: center; }
 
         .container { 
-            width: 95%; background: #141414; padding: 15px 15px 10px; 
+            width: 95%; background: #141414; padding: 15px 15px 5px; 
             border-radius: 25px 25px 0 0; border: 1px solid rgba(192, 192, 194, 0.2); 
             text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;
         }
 
-        .input-block { margin-bottom: 15px; text-align: left; }
-        .label-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 8px; color: var(--silver); font-weight: bold; }
-        .label-name { font-size: 11px; opacity: 0.8; letter-spacing: 1px; }
-        .label-val { font-size: 22px; color: #fff; }
+        .input-block { margin-bottom: 20px; text-align: left; position: relative; }
+        .label-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px; color: var(--silver); font-weight: bold; }
+        .label-name { font-size: 10px; opacity: 0.8; letter-spacing: 1px; }
+        .label-val { font-size: 20px; color: #fff; }
         
-        input[type=range] { -webkit-appearance: none; width: 100%; height: 8px; background: linear-gradient(to right, var(--red), var(--blue), #fff); border-radius: 4px; outline: none; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 32px; width: 32px; border-radius: 50%; background: var(--silver); border: 2px solid #000; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        input[type=range] { -webkit-appearance: none; width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; outline: none; margin: 15px 0 10px; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 28px; width: 28px; border-radius: 50%; background: var(--silver); border: 2px solid #000; box-shadow: 0 0 10px rgba(0,0,0,0.5); position: relative; z-index: 2; }
         
-        .status-box {
-            background: rgba(255,255,255,0.05); border-radius: 12px; padding: 12px; margin: 5px 0;
-            min-height: 45px; display: flex; align-items: center; justify-content: center; border: 1px dashed rgba(192,192,194,0.2);
-        }
-        #status-text { font-size: 11px; font-weight: bold; line-height: 1.4; text-transform: uppercase; }
+        /* Шкала с делениями */
+        .range-labels { display: flex; justify-content: space-between; padding: 0 2px; margin-top: -5px; }
+        .range-labels span { font-size: 9px; color: var(--silver); opacity: 0.5; position: relative; }
+        .range-labels span::before { content: '|'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); font-size: 8px; }
 
-        .results { display: flex; gap: 10px; flex-grow: 1; margin-top: 10px; margin-bottom: 10px; }
+        .status-box {
+            background: rgba(255,255,255,0.05); border-radius: 12px; padding: 10px; margin: 5px 0;
+            min-height: 40px; display: flex; align-items: center; justify-content: center; border: 1px dashed rgba(192,192,194,0.2);
+        }
+        #status-text { font-size: 10px; font-weight: bold; line-height: 1.3; text-transform: uppercase; }
+
+        .results { display: flex; gap: 8px; flex-grow: 1; margin-top: 5px; }
         .res-card { 
             flex: 1; background: rgba(255,255,255,0.03); border-radius: 15px; 
             border: 1px solid rgba(192, 192, 194, 0.1); 
-            display: flex; flex-direction: column; justify-content: center; padding: 10px;
+            display: flex; flex-direction: column; justify-content: center; padding: 8px;
         }
-        .val { display: block; font-size: 44px; font-weight: 900; line-height: 1; }
+        .val { display: block; font-size: 38px; font-weight: 900; line-height: 1; }
         .j-color { color: var(--red); } 
         .v-color { color: var(--blue); }
-        .unit { font-size: 11px; color: var(--silver); text-transform: uppercase; opacity: 0.6; margin-top: 10px; font-weight: bold; }
+        .unit { font-size: 10px; color: var(--silver); text-transform: uppercase; opacity: 0.6; margin-top: 5px; font-weight: bold; }
         
-        .footer { font-size: 8px; color: #444; letter-spacing: 3px; text-transform: uppercase; padding-bottom: 15px; }
+        .footer { font-size: 8px; color: #444; letter-spacing: 3px; text-transform: uppercase; padding: 10px 0; }
     </style>
 </head>
 <body>
@@ -84,18 +89,19 @@
     <div class="container">
         <div>
             <div class="input-block">
-                <div class="label-row">
-                    <span class="label-name">ВЕС ШАРА</span>
-                    <span id="w-val" class="label-val">0.30 г</span>
+                <div class="label-row"><span class="label-name">ВЕС ШАРА</span><span id="w-val" class="label-val">0.30 г</span></div>
+                <input type="range" id="weight" min="0.20" max="0.45" step="0.01" value="0.30" oninput="update(true)">
+                <div class="range-labels">
+                    <span>0.20</span><span>0.25</span><span>0.30</span><span>0.35</span><span>0.40</span><span>0.45</span>
                 </div>
-                <input type="range" id="weight" min="0.12" max="0.50" step="0.01" value="0.30" oninput="update(true)">
             </div>
+
             <div class="input-block">
-                <div class="label-row">
-                    <span class="label-name">СКОРОСТЬ</span>
-                    <span id="s-val" class="label-val">120 м/с</span>
+                <div class="label-row"><span class="label-name">СКОРОСТЬ</span><span id="s-val" class="label-val">120 м/с</span></div>
+                <input type="range" id="speed" min="60" max="210" step="1" value="120" oninput="update(true)">
+                <div class="range-labels">
+                    <span>60</span><span>90</span><span>120</span><span>150</span><span>180</span><span>210</span>
                 </div>
-                <input type="range" id="speed" min="50" max="220" step="1" value="120" oninput="update(true)">
             </div>
 
             <div class="status-box">
@@ -119,48 +125,41 @@
 
 <script>
     let audioCtx = null;
-    let lastValueW = null;
-    let lastValueS = null;
+    let lastW = null;
+    let lastS = null;
 
     function initAudio() {
         if (!audioCtx) {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         }
-        if (audioCtx.state === 'suspended') {
-            audioCtx.resume();
-        }
+        if (audioCtx.state === 'suspended') audioCtx.resume();
     }
 
-    function playSoftClick() {
+    function playTick() {
         if (!audioCtx) return;
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
-        
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(150, audioCtx.currentTime); 
-        osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.03);
-        
+        osc.frequency.setValueAtTime(1200, audioCtx.currentTime); 
+        osc.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.01);
         gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-        gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.03);
-        
+        gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.01);
         osc.connect(gain);
         gain.connect(audioCtx.destination);
-        
         osc.start();
-        osc.stop(audioCtx.currentTime + 0.03);
+        osc.stop(audioCtx.currentTime + 0.01);
     }
 
     function setW(v) { 
         initAudio();
         document.getElementById('weight').value = v; 
-        playSoftClick();
+        playTick();
         update(); 
     }
 
     function update(isUserAction = false) {
         const m = document.getElementById('weight').value;
         const v = document.getElementById('speed').value;
-        
         document.getElementById('w-val').innerText = m + ' г';
         document.getElementById('s-val').innerText = v + ' м/с';
         
@@ -170,12 +169,11 @@
         document.getElementById('joules').innerText = j.toFixed(2);
         document.getElementById('m02').innerText = v02;
 
-        // Воспроизводим звук только при реальном изменении цифр ползунком
-        if (isUserAction && (m !== lastValueW || v !== lastValueS)) {
+        if (isUserAction && (m !== lastW || v !== lastS)) {
             initAudio();
-            playSoftClick();
-            lastValueW = m;
-            lastValueS = v;
+            playTick();
+            lastW = m;
+            lastS = v;
         }
 
         const st = document.getElementById('status-text');
