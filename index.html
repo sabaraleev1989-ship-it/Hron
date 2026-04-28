@@ -55,10 +55,15 @@
             position: absolute; bottom: 18px; 
         }
         .ticks span { 
-            width: 1px; height: 6px; background: rgba(192, 192, 194, 0.3); 
+            width: 1px; height: 6px; background: rgba(192, 192, 194, 0.2); 
         }
-        /* Длинные штрихи для основных значений */
-        .ticks span.big { height: 10px; background: rgba(192, 192, 194, 0.6); }
+        /* Красные основные штрихи */
+        .ticks span.main { 
+            height: 12px; 
+            background: var(--red); 
+            width: 2px;
+            box-shadow: 0 0 5px rgba(227, 6, 19, 0.5);
+        }
 
         .range-labels { display: flex; justify-content: space-between; padding: 0 2px; margin-top: 5px; }
         .range-labels span { font-size: 9px; color: var(--silver); opacity: 0.5; width: 30px; text-align: center; }
@@ -100,6 +105,7 @@
         <div>
             <div class="input-block">
                 <div class="label-row"><span class="label-name">ВЕС ШАРА</span><span id="w-val" class="label-val">0.30 г</span></div>
+                <div class="ticks" id="weight-ticks"></div>
                 <input type="range" id="weight" min="0.20" max="0.45" step="0.01" value="0.30" oninput="update(true)">
                 <div class="range-labels">
                     <span>0.20</span><span>0.25</span><span>0.30</span><span>0.35</span><span>0.40</span><span>0.45</span>
@@ -108,7 +114,8 @@
 
             <div class="input-block">
                 <div class="label-row"><span class="label-name">СКОРОСТЬ</span><span id="s-val" class="label-val">120 м/с</span></div>
-                <div class="ticks" id="speed-ticks"></div> <input type="range" id="speed" min="50" max="220" step="1" value="120" oninput="update(true)">
+                <div class="ticks" id="speed-ticks"></div>
+                <input type="range" id="speed" min="50" max="220" step="1" value="120" oninput="update(true)">
                 <div class="range-labels">
                     <span>50</span><span>85</span><span>120</span><span>155</span><span>190</span><span>220</span>
                 </div>
@@ -138,13 +145,22 @@
     let lastW = null;
     let lastS = null;
 
-    // Генерируем штрихи для шкалы скорости (от 50 до 220 = 170 делений)
-    const tickContainer = document.getElementById('speed-ticks');
+    // Штрихи для веса (0.20 - 0.45)
+    const wTickContainer = document.getElementById('weight-ticks');
+    for (let i = 20; i <= 45; i++) {
+        const span = document.createElement('span');
+        // Красный штрих на 0.20, 0.25, 0.30, 0.35, 0.40, 0.45
+        if (i % 5 === 0) span.className = 'main';
+        wTickContainer.appendChild(span);
+    }
+
+    // Штрихи для скорости (50 - 220)
+    const sTickContainer = document.getElementById('speed-ticks');
     for (let i = 50; i <= 220; i++) {
         const span = document.createElement('span');
-        // Делаем каждый 10-й штрих чуть ярче и длиннее
-        if (i % 10 === 0) span.className = 'big';
-        tickContainer.appendChild(span);
+        // Красный штрих каждые 10 м/с (60, 70, 80...)
+        if (i % 10 === 0) span.className = 'main';
+        sTickContainer.appendChild(span);
     }
 
     function initAudio() {
