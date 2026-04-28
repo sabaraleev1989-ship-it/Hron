@@ -8,7 +8,10 @@
     <link rel="manifest" href="manifest.json">
     <title>ХРОН СКОРПИОН</title>
     <style>
-        :root { --silver: #c0c0c2; --red: #e30613; --blue: #0055a4; --green: #2ecc71; --orange: #f39c12; --cyan: #3498db; --purple: #9b59b6; }
+        :root { 
+            --silver: #c0c0c2; --red: #e30613; --blue: #0055a4; 
+            --green: #2ecc71; --orange: #f39c12; --cyan: #3498db; --purple: #9b59b6; 
+        }
         
         body { 
             margin: 0; 
@@ -106,11 +109,17 @@
     <div class="container">
         <div>
             <div class="input-block">
-                <div class="label-row"><span class="label-name">ВЕС ШАРА</span><span id="w-val" class="label-val">0.30 г</span></div>
+                <div class="label-row">
+                    <span class="label-name">ВЕС ШАРА</span>
+                    <span id="w-val" class="label-val">0.30 г</span>
+                </div>
                 <input type="range" id="weight" min="0.12" max="0.50" step="0.01" value="0.30" oninput="update(true)">
             </div>
             <div class="input-block">
-                <div class="label-row"><span class="label-name">СКОРОСТЬ</span><span id="s-val" class="label-val">120 м/с</span></div>
+                <div class="label-row">
+                    <span class="label-name">СКОРОСТЬ</span>
+                    <span id="s-val" class="label-val">120 м/с</span>
+                </div>
                 <input type="range" id="speed" min="50" max="220" step="1" value="120" oninput="update(true)">
             </div>
 
@@ -134,9 +143,15 @@
     </div>
 
 <script>
+    function haptic(int = 10) {
+        if (window.navigator && window.navigator.vibrate) {
+            window.navigator.vibrate(int);
+        }
+    }
+
     function setW(v) { 
         document.getElementById('weight').value = v; 
-        if (window.navigator.vibrate) window.navigator.vibrate(20); // Вибро при нажатии на кнопку веса
+        haptic(20);
         update(); 
     }
 
@@ -152,10 +167,7 @@
         document.getElementById('joules').innerText = j.toFixed(2);
         document.getElementById('m02').innerText = v02;
 
-        // Тактильный отклик при движении ползунка
-        if (isUserAction && window.navigator.vibrate) {
-            window.navigator.vibrate(5); // Короткая микро-вибрация (5мс)
-        }
+        if (isUserAction) haptic(5);
 
         const st = document.getElementById('status-text');
         
